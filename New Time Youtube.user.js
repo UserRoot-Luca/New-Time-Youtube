@@ -2,7 +2,7 @@
 // ==UserScript==
 // @name         New Time Youtube
 // @namespace    http://tampermonkey.net/
-// @version      1.0
+// @version      1.1
 // @description  ###
 // @author       UserRoot-Luca
 // @match        https://www.youtube.com/*
@@ -24,10 +24,10 @@
         return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${Math.floor(s % 60).toString().padStart(2, '0')}`;
     };
     window.onload = () => {
-        let mainDuration = document.querySelector('.ytp-time-duration').innerText;
         document.querySelector(".ytp-time-current").addEventListener("DOMSubtreeModified", () => {
             let video = document.querySelector("video");
             if (video != null) {
+                let mainDuration = document.querySelector('.ytp-time-duration').innerText.split(" ")[0];
                 let playbackSpeed = video.playbackRate;
                 let duration = video.duration;
                 let currentSeconds = video.currentTime;
