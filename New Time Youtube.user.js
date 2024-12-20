@@ -2,7 +2,7 @@
 // ==UserScript==
 // @name         New Time Youtube
 // @namespace    http://tampermonkey.net/
-// @version      2.0
+// @version      3.0
 // @description  ###
 // @author       UserRoot-Luca
 // @match        https://www.youtube.com/*
@@ -21,7 +21,7 @@
         return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${Math.floor(s % 60).toString().padStart(2, '0')}`;
     };
     window.onload = () => {
-        document.querySelector(".ytp-time-current").addEventListener("DOMSubtreeModified", () => {
+        new MutationObserver(() => {
             let video = document.querySelector("video");
             if (video != null) {
                 let mainDuration = document.querySelector('.ytp-time-duration').innerText.split(" ")[0];
@@ -32,6 +32,9 @@
                 let endOra = new Date(new Date().getTime() + (TimeMultiplier(remainingTime, playbackSpeed) * 1000));
                 document.querySelector('.ytp-time-duration').innerText = `${mainDuration} ( -${TimeFormats(remainingTime, playbackSpeed)} / ${endOra.getHours().toString().padStart(2, '0')}:${endOra.getMinutes().toString().padStart(2, '0')} )`;
             }
+        }).observe(document.querySelector(".ytp-time-current"), {
+            childList: true,
+            subtree: true,
         });
     };
 })();
